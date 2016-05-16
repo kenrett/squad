@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  # get 'users_controller/create'
-  #
-  # get 'users_controller/destroy'
-
   root 'static_pages#home'
   get 'help' => 'static_pages#help'
   get 'contact' => 'static_pages#contact'
@@ -12,4 +8,13 @@ Rails.application.routes.draw do
   delete 'logout'  => 'users#destroy'
 
   resources :users
+  resources :squads
+
+  scope '/api' do
+    scope '/v1' do
+      scope 'user' do
+        get '/squadrun' => 'order#index'
+      end
+    end
+  end
 end

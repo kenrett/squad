@@ -11,13 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160515210921) do
+ActiveRecord::Schema.define(version: 20160516203158) do
+
+  create_table "squads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "squads_users", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "squad_id"
+  end
+
+  add_index "squads_users", ["user_id", "squad_id"], name: "index_squads_users_on_user_id_and_squad_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "refresh_token"
   end
 
 end

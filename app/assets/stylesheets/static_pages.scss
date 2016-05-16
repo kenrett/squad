@@ -39,6 +39,10 @@ textarea {
   }
 }
 
+header {
+  max-height: 50px;
+}
+
 
 /* typography */
 
@@ -147,3 +151,21 @@ aside {
     }
   }
 }
+
+.team {
+  border: 1px solid black;
+  height: 100px;
+
+  span {
+    text-align: center;
+  }
+}
+
+aside {
+
+  textarea {
+    height: 100px;
+    margin-bottom: 5px;
+  }
+}
+

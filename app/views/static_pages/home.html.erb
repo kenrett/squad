@@ -2,11 +2,19 @@
     <div class="row">
       <aside class="col-md-4">
         <section class="user_info">
-          <h1>You're logged in</h1>
+          <h1>Hi <%= current_user.name %>!</h1>
         </section>
       </aside>
       <div class="col-md-8">
-        <h3>Other fun stuff</h3>
+        <h3>
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          <%= link_to "Create a Squad", '#' %></h3>
+        <h3>
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          <%= link_to "Assemble a SquadRun", '#' %></h3>
+        <h3>
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          <%= link_to "Edit An Existing SquadRun", '#' %></h3>
       </div>
     </div>
 <% else %>
@@ -19,6 +27,6 @@
         <a href="#">Squad</a>
       </h2>
 
-      <%= link_to "Sign in with Uber", 'https://login.uber.com/oauth/v2/authorize?client_id=' + Rails.application.secrets.uber_client_id + '&response_type=code&scope=profile request all_trips places history ride_widgets', class: "btn btn-lg btn-primary" %>
+      <%= link_to "Sign in with Uber", 'https://login.uber.com/oauth/v2/authorize?client_id=' + Rails.application.secrets.uber_client_id + '&response_type=code&scope=profile places history ride_widgets', class: "btn btn-lg btn-primary" %>
     </div>
 <% end %>

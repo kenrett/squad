@@ -1,47 +1,74 @@
 require 'net/http'
+require 'uri'
 
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update]
+  before_action :correct_user, only: [:edit, :update]
 
   def create
     @authorization_code = params[:code]
-    @callback_url = 'http://localhost:3000/auth/callback'
-    @consumer = OAuth::Consumer.new(
-        Rails.application.secrets.uber_client_id,
-        Rails.application.secrets.uber_client_secret,
-          :site => 'https://login.uber.com/oath/token')
-    data = { grant_type: "authorization_code",
-             redirect_uri: 'http://localhost:3000/auth/callback',
-             code: @authorization_code}
+    uri = URI('https://login.uber.com/oauth/v2/token')
+    @redirect_uri = 'http://localhost:3000/auth/callback'
+    data = {client_id: Rails.application.secrets.uber_client_id,
+            client_secret: Rails.application.secrets.uber_client_secret,
+            grant_type: "authorization_code",
+            redirect_uri: @redirect_uri,
+            code: @authorization_code}
 
-    @request_token = @consumer.get_request_token(:oauth_callback => @callback_url)
-byebug
-    session[:token] = request_token.token
-    session[:token_secret] = request_token.secret
-    redirect_to @request_token.authorize_url(:oauth_callback => @callback_url)
+    res = Net::HTTP.post_form(uri, data)
+    @access_token = ActiveSupport::JSON.decode(res.body)['access_token']
+    @refresh_token = ActiveSupport::JSON.decode(res.body)['refresh_token']
 
-    p "*" * 100
-    p res
+    get_user_info(@access_token)
 
-    byebug
-    # @user = User.new(user_params)
-    # if @user.save
-    #   flash[:info] = "You are now logged in."
-    #   redirect_to root_url
-    # else
-    #   render 'new'
-    # end
+    @user = User.new(name: @user_info["first_name"], email: @user_info["email"], refresh_token: @refresh_token)
+
+
+    if @user.save
+      session[:user_id] = @user.id
+      flash[:info] = "You are now logged in."
+      redirect_to root_url
+    else
+      render 'new'
+    end
+  end
+
+  def destroy
+    session.clear
+#   uri = URI('https://login.uber.com/oauth/revoke')
+#
+#     data = {client_id: Rails.application.secrets.uber_client_id,
+#             client_secret: Rails.application.secrets.uber_client_secret,
+#             token: @access_token}
+#
+#     res = Net::HTTP.post_form(uri, data)
+# p p res
+#     byebug
+    redirect_to root_url
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:name, :email, :refresh_token)
   end
 
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user)
+  end
+
+  def get_user_info(access_token)
+    data = "Bearer #{access_token}"
+
+    url = URI.parse('https://sandbox-api.uber.com/v1/me')
+    req = Net::HTTP::Get.new(url.path)
+    req.add_field('Authorization', data)
+
+    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') do |http|
+      http.request(req)
+    end
+
+    @user_info = JSON.parse(res.body)
   end
 end
