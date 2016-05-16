@@ -21,11 +21,13 @@ class UsersController < ApplicationController
 
     get_user_info(@access_token)
 
-    @user = User.new(name: @user_info["first_name"], email: @user_info["email"], refresh_token: @refresh_token)
-
+    @user = User.find_or_create_by(name: @user_info["first_name"], email: @user_info["email"])
+    @user.update_attribute(:refresh_token, @refresh_token)
 
     if @user.save
       session[:user_id] = @user.id
+      session[:access_token] = @access_token
+      session[:refresh_token] = @refresh_token
       flash[:info] = "You are now logged in."
       redirect_to root_url
     else
@@ -35,15 +37,15 @@ class UsersController < ApplicationController
 
   def destroy
     session.clear
-#   uri = URI('https://login.uber.com/oauth/revoke')
+    uri = URI('https://login.uber.com/oauth/revoke')
 #
-#     data = {client_id: Rails.application.secrets.uber_client_id,
-#             client_secret: Rails.application.secrets.uber_client_secret,
-#             token: @access_token}
-#
-#     res = Net::HTTP.post_form(uri, data)
-# p p res
-#     byebug
+    data = {client_id: Rails.application.secrets.uber_client_id,
+            client_secret: Rails.application.secrets.uber_client_secret,
+            token: @access_token}
+
+    uri.query = URI.encode_www_form(data)
+    response = Net::HTTP.get(uri)
+    flash[:danger] = "You have been logged out."
     redirect_to root_url
   end
 

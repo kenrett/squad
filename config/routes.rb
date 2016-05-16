@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'order/index'
+
   root 'static_pages#home'
   get 'help' => 'static_pages#help'
   get 'contact' => 'static_pages#contact'
@@ -12,7 +14,7 @@ Rails.application.routes.draw do
 
   scope '/api' do
     scope '/v1' do
-      scope 'user' do
+      scope 'user/:id' do
         get '/squadrun' => 'order#index'
       end
     end
