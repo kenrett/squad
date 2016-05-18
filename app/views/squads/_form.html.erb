@@ -1,0 +1,8 @@
+<%= form_for [@user, @squad] do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+
+    <%= f.submit "Submit", class: 'btn btn-primary' %>
+    <%= link_to "Back", squadrun_all_path(current_user.id) %>
+<% end %>

@@ -1,2 +1,0 @@
-class SquadsControllerController < ApplicationController
-end

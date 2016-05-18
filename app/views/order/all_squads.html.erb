@@ -1,0 +1,11 @@
+<h1>All Current Squads</h1>
+
+<% @squads.each do |squad| %>
+  <h2><%= link_to "#{squad.name}", edit_user_squad_path(current_user.id, squad.id) %></h2>
+<% end %>
+</br>
+</br>
+<%= link_to "Create Another Squad", new_user_squad_path(current_user), class: "btn btn-primary" %>
+</br>
+</br>
+<%= link_to "Return home", root_url %>

@@ -1,0 +1,23 @@
+<form action="<%= squadrun_add_car_url(current_user, current_user.squads.first) %>" method="post" style="margin-top: 100px;">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  Start Lat:<br>
+  <input type="text" name="start_latitude" value="37.780969"><br>
+  Start Long:<br>
+  <input type="text" name="start_longitude" value="-122.406011">
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+  End Lat:<br>
+  <input type="text" name="end_latitude" value="37.781446"><br>
+  End Long:<br>
+  <input type="text" name="end_longitude" value="-122.392154">
+  </br>
+  </br>
+  </br>
+  <input type="submit" value="Let's Roll, B!">
+</form>
+
+<!--"product_id": "04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"-->

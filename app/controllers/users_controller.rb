@@ -26,7 +26,6 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:user_id] = @user.id
-      session[:access_token] = @access_token
       session[:refresh_token] = @refresh_token
       flash[:info] = "You are now logged in."
       redirect_to root_url
@@ -55,17 +54,14 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :refresh_token)
   end
 
-  def correct_user
-    @user = User.find(params[:id])
-    redirect_to(root_url) unless current_user?(@user)
-  end
-
   def get_user_info(access_token)
     data = "Bearer #{access_token}"
 
     url = URI.parse('https://sandbox-api.uber.com/v1/me')
+    # uberify('https://sandbox-api.uber.com/v1/me', "GET")
     req = Net::HTTP::Get.new(url.path)
     req.add_field('Authorization', data)
+    session[:access_token] = data
 
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') do |http|
       http.request(req)
