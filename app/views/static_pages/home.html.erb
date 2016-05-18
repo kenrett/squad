@@ -36,6 +36,6 @@
         <a href="#">Squad</a>
       </h2>
 
-      <%= link_to "Sign in with Uber", 'https://login.uber.com/oauth/v2/authorize?client_id=' + Rails.application.secrets.uber_client_id + '&response_type=code&scope=profile places history ride_widgets request', class: "btn btn-lg btn-primary" %>
+      <%= link_to "Sign in with Uber", 'https://login.uber.com/oauth/v2/authorize?client_id=' + ENV["uber_client_id"] + '&response_type=code&scope=profile places history ride_widgets request', class: "btn btn-lg btn-primary" %>
     </div>
 <% end %>

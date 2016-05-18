@@ -9,8 +9,8 @@ class UsersController < ApplicationController
     @authorization_code = params[:code]
     uri = URI('https://login.uber.com/oauth/v2/token')
     @redirect_uri = 'http://localhost:3000/auth/callback'
-    data = {client_id: Rails.application.secrets.uber_client_id,
-            client_secret: Rails.application.secrets.uber_client_secret,
+    data = {client_id: ENV["uber_client_id"],
+            client_secret: ENV["uber_client_secret"],
             grant_type: "authorization_code",
             redirect_uri: @redirect_uri,
             code: @authorization_code}
@@ -38,8 +38,8 @@ class UsersController < ApplicationController
     session.clear
     uri = URI('https://login.uber.com/oauth/revoke')
 #
-    data = {client_id: Rails.application.secrets.uber_client_id,
-            client_secret: Rails.application.secrets.uber_client_secret,
+    data = {client_id: ENV["uber_client_id"],
+            client_secret: ENV["uber_client_secret"],
             token: @access_token}
 
     uri.query = URI.encode_www_form(data)
