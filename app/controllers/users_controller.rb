@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def create
     @authorization_code = params[:code]
     uri = URI('https://login.uber.com/oauth/v2/token')
-    @redirect_uri = 'http://limitless-island-93047.herokuapp.com/auth/callback'
+    @redirect_uri = 'https://limitless-island-93047.herokuapp.com/auth/callback'
     data = {client_id: ENV["uber_client_id"],
             client_secret: ENV["uber_client_secret"],
             grant_type: "authorization_code",
