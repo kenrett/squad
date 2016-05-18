@@ -1,1 +1,1 @@
-# Figaro.require_keys("squadapp_secret_key_base","squadapp_uber_client_id","squadapp_uber_client_secret","squadapp_uber_server_token")
+Figaro.require_keys("secret_key_base","uber_client_id","uber_client_secret","uber_server_token")
