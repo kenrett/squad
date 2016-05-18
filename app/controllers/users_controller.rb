@@ -16,7 +16,9 @@ class UsersController < ApplicationController
             code: @authorization_code}
 
     res = Net::HTTP.post_form(uri, data)
-    p res.body
+    p ENV["uber_client_id"]
+    p "* " * 25
+    p ENV["uber_client_secret"]
     @access_token = ActiveSupport::JSON.decode(res.body)['access_token']
     @refresh_token = ActiveSupport::JSON.decode(res.body)['refresh_token']
 p "*" * 100
