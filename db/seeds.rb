@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-u1 = User.create!(name:  "Mr. T",
+u2 = User.create!(name:  "Mr. T",
                   email: "pityer@squad.co")
 
 3.times do |n|
@@ -19,6 +19,8 @@ end
 sq1 = Squad.create!(name: "A Team")
 sq2 = Squad.create!(name: "B Team")
 sq3 = Squad.create!(name: "C Team")
+
+u1 = User.first
 
 u1.squads = [sq1, sq2, sq3]
 
