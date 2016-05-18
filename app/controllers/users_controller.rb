@@ -10,17 +10,16 @@ class UsersController < ApplicationController
     uri = URI('https://login.uber.com/oauth/v2/token')
     if Rails.env.production?
       @redirect_uri = 'https://limitless-island-93047.herokuapp.com/auth/callback'
+    else
+      @redirect_uri = ''
     end
 
     data = {client_id: ENV["uber_client_id"],
             client_secret: ENV["uber_client_secret"],
             grant_type: "authorization_code",
+            redirect_uri: @redirect_uri,
             code: @authorization_code}
-    if @redirect_uri.any?
-      data[:redirect_uri] = @redirect_uri
-    end
-    p "*" * 200
-    p data
+
     res = Net::HTTP.post_form(uri, data)
     p ENV["uber_client_id"]
     p "* " * 25
