@@ -18,7 +18,8 @@ class UsersController < ApplicationController
     res = Net::HTTP.post_form(uri, data)
     @access_token = ActiveSupport::JSON.decode(res.body)['access_token']
     @refresh_token = ActiveSupport::JSON.decode(res.body)['refresh_token']
-
+p "*" * 100
+    p @access_token
     get_user_info(@access_token)
 
     @user = User.find_or_create_by(name: @user_info["first_name"], email: @user_info["email"])
@@ -56,7 +57,7 @@ class UsersController < ApplicationController
 
   def get_user_info(access_token)
     data = "Bearer #{access_token}"
-
+p "In get_user_info"
     url = URI.parse('https://sandbox-api.uber.com/v1/me')
     # uberify('https://sandbox-api.uber.com/v1/me', "GET")
     req = Net::HTTP::Get.new(url.path)
@@ -66,7 +67,8 @@ class UsersController < ApplicationController
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') do |http|
       http.request(req)
     end
-
+p "&" * 20
+    p res.body
     @user_info = JSON.parse(res.body)
   end
 end
