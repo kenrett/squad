@@ -16,8 +16,8 @@ class UsersController < ApplicationController
             client_secret: ENV["uber_client_secret"],
             grant_type: "authorization_code",
             code: @authorization_code}
-    if @redirect_uri
-      data.redirect_uri = @redirect_uri
+    if @redirect_uri.any?
+      data[:redirect_uri] = @redirect_uri
     end
     p "*" * 200
     p data
